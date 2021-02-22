@@ -82,7 +82,7 @@ module.exports = {
       const changedPackages = allPackages
         .map((package) => {
           const { edited, deleted } = git.fileMatch(
-            path.join(packagesDir, package)
+            path.join(packagesDir, package, '**', '*')
           );
 
           return edited.length || deleted.length ? package : null;
@@ -108,36 +108,18 @@ module.exports = {
         })
         .filter(Boolean);
 
-      const changedPackgesGlob = `{${changedPackageNames.join(",")}}`;
+      const changedPackgesScopeFileContent = changedPackageNames.map(pkg => `--scope ${pkg}`).join(' ');
 
-      console.log("changedPackagesScope", changedPackgesGlob);
+      console.log("changedPackagesScope", changedPackgesScopeFileContent);
 
-      try {
-        fs.writeFileSync(".changed_scope", changedPackgesGlob);
-      } catch (err) {
-        console.log(err, "<<<");
-      }
-      //   await run.command(`ls`)
+      fs.writeFileSync(".changed_scope", changedPackgesScopeFileContent);
 
       for (const packageDir of allPackages) {
         const distPath = path.join(packagesDir, packageDir, "dist");
-
         console.log("Restoring cache", distPath);
-
         const status = await cache.restore(distPath);
-
         console.log("Restoring status", status, distPath);
       }
-
-      //   const { stdout, stderr, exitCode } = await run('git', [
-      //     'diff',
-      //     '--quiet',
-      //     '${CACHED_COMMIT_REF:-HEAD^}',
-      //     '${COMMIT_REF:-HEAD}',
-      //     'packages',
-      //   ])
-
-      //   console.log('exitCode', exitCode)
     } catch (error) {
       // Report a user error
       build.failBuild("Error message", { error });

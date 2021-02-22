@@ -13,4 +13,4 @@ package = "./plugins/netlify-plugin-lerna-cache"
 
 [build]
 # Dummy build command
-command = "lerna bootstrap && lerna run prepare --scope $(cat .changed_scope)"
+command = "lerna bootstrap && if [[ -s .changed_scope ]]; then lerna run prepare $(cat .changed_scope); fi"
