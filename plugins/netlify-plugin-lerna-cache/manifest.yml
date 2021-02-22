@@ -1,0 +1,7 @@
+name: 'netlify-plugin-lerna-cache'
+inputs: []
+# Example inputs:
+#  - name: example
+#    description: Example description
+#    default: 5
+#    required: false

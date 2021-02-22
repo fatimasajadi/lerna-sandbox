@@ -1,0 +1,4 @@
+node_modules
+.changed_scope
+.DS_Store
+.netlify
