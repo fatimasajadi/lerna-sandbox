@@ -82,8 +82,10 @@ module.exports = {
       const changedPackages = allPackages
         .map((package) => {
           const { edited, deleted } = git.fileMatch(
-            path.join(packagesDir, package, '**', '*')
+            path.join(packagesDir, package, "**", "*")
           );
+
+          console.log("changes for ", package, edited, deleted);
 
           return edited.length || deleted.length ? package : null;
         })
@@ -108,7 +110,9 @@ module.exports = {
         })
         .filter(Boolean);
 
-      const changedPackgesScopeFileContent = changedPackageNames.map(pkg => `--scope ${pkg}`).join(' ');
+      const changedPackgesScopeFileContent = changedPackageNames
+        .map((pkg) => `--scope ${pkg}`)
+        .join(" ");
 
       console.log("changedPackagesScope", changedPackgesScopeFileContent);
 
